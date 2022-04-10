@@ -1,8 +1,19 @@
 #include "board.hpp"
 
+
+
+
 int main()
 {
     Board b = Board();
-    std::cout << b.getFriendlyDown((uint64_t)1 << 16) << std::endl;
-    return 0;
+    b.Display();
+    while(true)
+    {
+        int col,row;
+        cin >> col >> row;
+        uint64_t pos = (uint64_t)1 << (col + 8*row);
+        b.Play(pos);
+        b.Display();
+    }
+
 }
