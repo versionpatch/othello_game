@@ -1,20 +1,17 @@
 #include "board.hpp"
-
+#include "minmax.hpp"
 
 
 
 int main()
 {
     Board b = Board();
+    MinMaxPlayer p = MinMaxPlayer(5);
     b.GetAllLegalMoves(true);
-    /*
-    while(true)
+
+    while(!b.GameOver())
     {
-        int col,row;
-        cin >> col >> row;
-        uint64_t pos = (uint64_t)1 << (col + 8*row);
-        b.Play(pos);
-        b.Display();
+        b.Play(p.GetBestMove(b));
     }
-    */
+    b.Display();
 }

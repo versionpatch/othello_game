@@ -1,17 +1,20 @@
 #ifndef MINMAX_HPP
 #define MINMAX_HPP
 
-#include <board.hpp>
+#include "board.hpp"
 
 class MinMaxPlayer
 {
     private:
-        Board* gameInstance;
+        int depth = 5;
     public:
-        MinMaxPlayer(Board* b)
+        MinMaxPlayer(int depth)
         {
-            gameInstance = b;
+           this->depth = depth;
         }
+
+        uint64_t GetBestMove(Board b);
+
 };
 
 #endif

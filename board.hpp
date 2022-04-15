@@ -37,11 +37,13 @@ class Board
 
     public:
         Board();
+        static void Initialize();
         bool Play(uint64_t pos,bool flip = true);
         void Display();
         int GetNumBlack();
         int GetNumWhite();
         bool GameOver();
+        bool IsWhite();
         uint64_t GetAllLegalMoves(bool debug = false);
         
 

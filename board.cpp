@@ -294,7 +294,7 @@ void Board::Display()
 
 uint64_t Board::GetAllLegalMoves(bool debug)
 {
-    uint64_t enemyColor = isWhite ? ~color : color;
+    uint64_t enemyColor = (isWhite ? ~color : color) & board;
     uint64_t neighborHood = (enemyColor << 8) 
                         | (enemyColor >> 8) 
                         | ((enemyColor << 1) & 0xfefefefefefefefe) 
@@ -363,4 +363,9 @@ bool Board::GameOver()
     bool t2 = GetAllLegalMoves();
     isWhite = !isWhite;
     return !t2;
+}
+
+bool Board::IsWhite()
+{
+    return isWhite;
 }
