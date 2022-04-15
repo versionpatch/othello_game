@@ -285,7 +285,7 @@ void Board::Display()
             }
             else
             {
-                std :: cout << " 空 ";
+                std :: cout << " ー ";
             }
         }
         std::cout << std::endl;
@@ -346,22 +346,23 @@ uint64_t Board::GetAllLegalMoves(bool debug)
 
 int Board::GetNumBlack()
 {
-    return __builtin_popcount(~color & board);
+    return __builtin_popcountll ((~color) & board);
 }
 
 int Board::GetNumWhite()
 {
-    return __builtin_popcount(color & board);
+    return __builtin_popcountll (color & board);
 }
 
-bool Board::GameOver()
+bool Board::GameOver(uint64_t* output)
 {
-    bool t1 = GetAllLegalMoves();
+    uint64_t t1 = GetAllLegalMoves();
+    if (output)
+        *output = t1;
     if (t1)
         return false;
     isWhite = !isWhite;
     bool t2 = GetAllLegalMoves();
-    isWhite = !isWhite;
     return !t2;
 }
 
