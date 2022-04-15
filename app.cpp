@@ -6,7 +6,8 @@
 int main()
 {
     Board b = Board();
-    b.Display();
+    b.GetAllLegalMoves(true);
+    /*
     while(true)
     {
         int col,row;
@@ -15,5 +16,5 @@ int main()
         b.Play(pos);
         b.Display();
     }
-
+    */
 }

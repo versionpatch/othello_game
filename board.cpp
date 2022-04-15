@@ -233,7 +233,7 @@ uint64_t Board::getFriendlyDownDiagD2(uint64_t pos, uint64_t *rayout,bool white)
     return (n);
 }
 
-bool Board::Play(uint64_t pos)
+bool Board::Play(uint64_t pos,bool flip)
 {
     if (pos & board)
         return false;
@@ -248,15 +248,16 @@ bool Board::Play(uint64_t pos)
             if ((oppColorBoard & ray) == ray)
             {
                 result |= (res != 0);
-                (isWhite) ? setWhite(ray) : setBlack(ray);
+                if (flip)
+                    (isWhite) ? setWhite(ray) : setBlack(ray);
             }
         }
     }
-    if (result)
+    if (result && flip)
     {
         isWhite ? setWhite(pos) : setBlack(pos);
+        isWhite = !isWhite;
     }
-    isWhite = !isWhite;
     return result;
 }
 
@@ -280,13 +281,86 @@ void Board::Display()
             uint64_t pos = (uint64_t)1 << (i + 8*j);
             if (pos & board)
             {
-                std::cout << ((color & pos) ? " O " : " X ");
+                std::cout << ((color & pos) ? " 白 " : " 黒 ");
             }
             else
             {
-                std :: cout << " - ";
+                std :: cout << " 空 ";
             }
         }
         std::cout << std::endl;
     }
+}
+
+uint64_t Board::GetAllLegalMoves(bool debug)
+{
+    uint64_t enemyColor = isWhite ? ~color : color;
+    uint64_t neighborHood = (enemyColor << 8) 
+                        | (enemyColor >> 8) 
+                        | ((enemyColor << 1) & 0xfefefefefefefefe) 
+                        | ((enemyColor << 1) & 0xfefefefefefefefe) << 8
+                        | ((enemyColor << 1) & 0xfefefefefefefefe) >> 8
+                        | ((enemyColor >> 1) & 0x7f7f7f7f7f7f7f7f)
+                        | ((enemyColor >> 1) & 0x7f7f7f7f7f7f7f7f) << 8
+                        | ((enemyColor >> 1) & 0x7f7f7f7f7f7f7f7f) >> 8;
+    neighborHood = neighborHood & ~enemyColor;
+    uint64_t output = 0;
+    for (int i = 0;i < 64;i++)
+    {
+        uint64_t pos = (uint64_t)1 << i;
+        if (neighborHood & pos)
+        {
+            bool legal = Play(pos,false);
+            if (legal)
+            {
+                output |= pos;
+            }
+        }
+    }
+    if (debug)
+    {
+        for (int j = 7;j >= 0;j--)
+        {
+            for (int i = 0; i < 8;i++)
+            {
+                uint64_t pos = (uint64_t)1 << (i + 8*j);
+                if (pos & board)
+                {
+                    std::cout << ((color & pos) ? " 白 " : " 黒 ");
+                }
+                else
+                {
+                    if (pos & output)
+                        std :: cout << " 合 ";
+                    else
+                        std :: cout << " ー ";
+                }
+            }
+            std::cout << std::endl;
+        }
+        std::cout << (isWhite ? "白" : "黒") << std::endl;
+    }
+    return output;
+
+}
+
+int Board::GetNumBlack()
+{
+    return __builtin_popcount(~color & board);
+}
+
+int Board::GetNumWhite()
+{
+    return __builtin_popcount(color & board);
+}
+
+bool Board::GameOver()
+{
+    bool t1 = GetAllLegalMoves();
+    if (t1)
+        return false;
+    isWhite = !isWhite;
+    bool t2 = GetAllLegalMoves();
+    isWhite = !isWhite;
+    return !t2;
 }

@@ -1,6 +1,4 @@
 #ifndef BOARD_HPP
-
-
 #define BOARD_HPP
 
 #include <iostream>
@@ -39,8 +37,12 @@ class Board
 
     public:
         Board();
-        bool Play(uint64_t pos);
+        bool Play(uint64_t pos,bool flip = true);
         void Display();
+        int GetNumBlack();
+        int GetNumWhite();
+        bool GameOver();
+        uint64_t GetAllLegalMoves(bool debug = false);
         
 
 
