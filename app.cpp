@@ -7,7 +7,7 @@ int main()
 {
 
     Board b = Board();
-    MinMaxPlayer p = MinMaxPlayer(5);
+    MinMaxPlayer p = MinMaxPlayer(10);
     std::string command;
     bool gameOn = true;
     while(true)

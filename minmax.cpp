@@ -24,7 +24,7 @@ uint64_t MinMaxPlayer::GetBestMoveGreedy(Board b)
     return currentBest;
 }
 
-int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,uint64_t* outputMove)
+int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,int alpha,int beta,uint64_t* outputMove)
 {
     uint64_t legalMoves = 0;
     if (b.GameOver(&legalMoves) || maxDepth == 0)
@@ -37,7 +37,7 @@ int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,uint6
         int val = maxt ? -9999 : 9999;
         if (!legalMoves)
         {
-            return EvaluteState(b,maxDepth - 1,!maxt,player);
+            return EvaluteState(b,maxDepth - 1,!maxt,player,alpha,beta);
         }
         while (legalMoves)
         {
@@ -45,7 +45,7 @@ int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,uint6
             legalMoves &= ~nextPos;
             Board bp = Board(b);
             bp.Play(nextPos);
-            int v = EvaluteState(bp,maxDepth - 1,!maxt,player);
+            int v = EvaluteState(bp,maxDepth - 1,!maxt,alpha,beta,player);
             if (maxt)
             {
                 if (v > val)
@@ -54,6 +54,9 @@ int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,uint6
                     if (outputMove)
                         *outputMove = nextPos;
                 }
+                if (val >= beta)
+                    return val;
+                alpha = max(alpha,val);
             }
             else
             {
@@ -63,6 +66,9 @@ int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,uint6
                     if (outputMove)
                         *outputMove = nextPos;
                 }
+                if (val <= alpha)
+                    return v;
+                beta = min(beta,val);
             }
         }
         return val;
@@ -72,6 +78,6 @@ int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,uint6
 uint64_t MinMaxPlayer::GetBestMove(Board b)
 {
     uint64_t output = 0;
-    EvaluteState(b,depth,true,b.IsWhite(),&output);
+    EvaluteState(b,depth,true,b.IsWhite(),-9999,9999,&output);
     return output;
 }
