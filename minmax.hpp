@@ -13,8 +13,9 @@ class MinMaxPlayer
            this->depth = depth;
         }
 
+        uint64_t GetBestMoveGreedy(Board b);
+        int EvaluteState(Board b, int maxDepth,bool max,bool player,uint64_t* outputMove = nullptr );
         uint64_t GetBestMove(Board b);
-
 };
 
 #endif
