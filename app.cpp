@@ -131,11 +131,12 @@ int main()
                     std::cout << "? Invalid Move" << std::endl;
                     continue;
                 }
+                std::cout << "= " << std::endl;
                 if (b.GameOver(nullptr,false,nullptr))
                 {
-                    std::cout << "? Game over" << std::endl;
                     gameOn = false;
                 }
+                
                 
             }
             catch(...)
