@@ -131,7 +131,7 @@ int main()
                     std::cout << "? Invalid Move" << std::endl;
                     continue;
                 }
-                std::cout << "= " << std::endl;
+                std::cout << "= " << std::endl << std::endl;
                 if (b.GameOver(nullptr,false,nullptr))
                 {
                     gameOn = false;
