@@ -29,7 +29,7 @@ int main()
                 int ind = __builtin_ctzll(move);
                 int row = ind / 8;
                 int col = ind % 8;
-                std::cout << "= " << row + 1 << letters[col] << std::endl;
+                std::cout << "= " << letters[col] << row + 1 << std::endl;
             }
         }
         if (command == "display")
@@ -119,8 +119,8 @@ int main()
             }
             try
             {
-                int lg = stoi(command.substr(0,1)) - 1;
-                int col = command[1] - 'a';
+                int lg = stoi(command.substr(1,1)) - 1;
+                int col = command[0] - 'a';
                 if (lg >= 8 || col >= 8 || col < 0)
                 {
                     std::cout << "? Error" << std::endl;
