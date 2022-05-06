@@ -27,7 +27,8 @@ uint64_t MinMaxPlayer::GetBestMoveGreedy(Board b)
 int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,int alpha,int beta,uint64_t* outputMove)
 {
     uint64_t legalMoves = 0;
-    if (b.GameOver(&legalMoves) || maxDepth == 0)
+    bool gOver = b.GameOver(&legalMoves);
+    if (gOver || maxDepth == 0)
     {
         int sc = (b.GetNumWhite() - b.GetNumBlack()) * (player ? 1 : -1);
         return sc;
@@ -78,6 +79,11 @@ int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,int a
 uint64_t MinMaxPlayer::GetBestMove(Board b)
 {
     uint64_t output = 0;
-    EvaluteState(b,depth,true,b.IsWhite(),-9999,9999,&output);
+    bool sk = false;
+    bool gOver = b.GameOver(nullptr,false,&sk);
+    if (sk)
+        return 0;
+    Board bp(b);
+    EvaluteState(bp,depth,true,bp.IsWhite(),-9999,9999,&output);
     return output;
 }

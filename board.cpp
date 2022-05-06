@@ -96,6 +96,10 @@ uint64_t Board::getFriendlyUp(uint64_t pos, uint64_t *rayout,bool white)
         *rayout = (colIntervals[rowneighbour - 1] - colIntervals[row]) << (col);
     return n;
 }
+void Board::Pass()
+{
+    isWhite = !isWhite;
+}
 uint64_t Board::getFriendlyDown(uint64_t pos, uint64_t *rayout,bool white)
 {
     int ind = __builtin_ctzll(pos);
@@ -274,7 +278,7 @@ void Board::setBlack(uint64_t p)
 
 void Board::Display()
 {
-    for (int j = 7;j >= 0;j--)
+    for (int j = 0;j < 8;j++)
     {
         for (int i = 0; i < 8;i++)
         {
@@ -354,7 +358,7 @@ int Board::GetNumWhite()
     return __builtin_popcountll (color & board);
 }
 
-bool Board::GameOver(uint64_t* output)
+bool Board::GameOver(uint64_t* output, bool skip, bool* skippable)
 {
     uint64_t t1 = GetAllLegalMoves();
     if (output)
@@ -363,6 +367,10 @@ bool Board::GameOver(uint64_t* output)
         return false;
     isWhite = !isWhite;
     bool t2 = GetAllLegalMoves();
+    if (!skip)
+        isWhite = !isWhite;
+    if (skippable != nullptr)
+        *skippable = true;
     return !t2;
 }
 

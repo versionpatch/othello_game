@@ -42,8 +42,9 @@ class Board
         void Display();
         int GetNumBlack();
         int GetNumWhite();
-        bool GameOver(uint64_t* output = nullptr);
+        bool GameOver(uint64_t* output = nullptr, bool skip = true, bool* skippable = nullptr);
         bool IsWhite();
+        void Pass();
         uint64_t GetAllLegalMoves(bool debug = false);
         
 

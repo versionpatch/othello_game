@@ -5,7 +5,7 @@
 
 int main()
 {
-
+    char letters[8] = {'a','b','c','d','e','f','g','h'};
     Board b = Board();
     MinMaxPlayer p = MinMaxPlayer(10);
     std::string command;
@@ -13,6 +13,25 @@ int main()
     while(true)
     {
         cin >> command;
+        if (command == "genmove")
+        {
+            cin >> command;
+            if (b.IsWhite() && command != "white" || !b.IsWhite() && command != "black")
+            {
+                std::cout << "? Wrong player" << std::endl;
+                continue;
+            }
+            uint64_t move = p.GetBestMove(b);
+            if (move == 0)
+                std::cout << "= pass" << std::endl;
+            else
+            {
+                int ind = __builtin_ctzll(move);
+                int row = ind / 8;
+                int col = ind % 8;
+                std::cout << "= " << row + 1 << letters[col] << std::endl;
+            }
+        }
         if (command == "display")
             b.Display();
         else if (command == "player")
@@ -71,10 +90,27 @@ int main()
         else if (command == "play")
         {
             cin >> command;
+            if (b.IsWhite() && command != "white" || !b.IsWhite() && command != "black")
+            {
+                std::cout << "? Wrong player" << std::endl;
+                continue;
+            }
+            cin >> command;
             if (!gameOn)
             {
-                std::cout << "Game is over. Please reset" << std::endl;
+                std::cout << "? Game is over. Please reset" << std::endl;
                 continue;
+            }
+            if (command == "pass")
+            {
+                bool sk = false;
+                b.GameOver(nullptr,false,&sk);
+                if (sk)
+                {
+                    b.Pass();
+                    std::cout << "= " << std::endl;
+                    continue;
+                }
             }
             if (command.length() != 2)
             {
@@ -83,22 +119,21 @@ int main()
             }
             try
             {
-                int x = stoi(command);
-                int lg = x / 10;
-                int col = x % 10;
-                if (lg >= 8 || col >= 8 )
+                int lg = stoi(command.substr(0,1)) - 1;
+                int col = command[1] - 'a';
+                if (lg >= 8 || col >= 8 || col < 0)
                 {
-                    std::cout << "Error" << std::endl;
+                    std::cout << "? Error" << std::endl;
                     continue;
                 }
                 if (!b.Play((uint64_t)1 << (8*lg + col)))
                 {
-                    std::cout << "Invalid Move" << std::endl;
+                    std::cout << "? Invalid Move" << std::endl;
                     continue;
                 }
-                if (b.GameOver())
+                if (b.GameOver(nullptr,false,nullptr))
                 {
-                    std::cout << "Game over" << std::endl;
+                    std::cout << "? Game over" << std::endl;
                     gameOn = false;
                 }
                 
