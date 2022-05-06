@@ -23,13 +23,17 @@ int main()
             }
             uint64_t move = p.GetBestMove(b);
             if (move == 0)
+            {
                 std::cout << "= pass" << std::endl << std::endl;
+                b.Pass();
+            }
             else
             {
                 int ind = __builtin_ctzll(move);
                 int row = ind / 8;
                 int col = ind % 8;
                 std::cout << "= " << letters[col] << row + 1 << std::endl << std::endl;
+                b.Play(move,true);
             }
         }
         if (command == "display")

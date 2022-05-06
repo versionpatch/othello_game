@@ -323,7 +323,7 @@ uint64_t Board::GetAllLegalMoves(bool debug)
     }
     if (debug)
     {
-        for (int j = 7;j >= 0;j--)
+        for (int j = 0;j < 8;j++)
         {
             for (int i = 0; i < 8;i++)
             {
