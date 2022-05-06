@@ -295,7 +295,37 @@ void Board::Display()
         std::cout << std::endl;
     }
 }
-
+int Board::GetEvaluation1(bool w)
+{
+    uint64_t defactoColor = w ? color : ~color;
+    //award 3 times as many points for stable disks
+    uint64_t one = 1;
+    uint64_t untakableWhite = (one << 0) || (one << 7) || (one << 56) || (one << 63);
+    untakableWhite &= (defactoColor & board);
+    for (int it = 0;it < 7;it++)
+    {
+        for (int r = 0; r < 8;r++)
+        {
+            for (int c = 0;c < 8;c++)
+            {
+                uint64_t pos = (one << (c + r*8));
+                bool untakableUp = (r == 0 || untakableWhite & (pos >> 8));
+                bool untakableDown = (r == 7 || untakableWhite & (pos << 8));
+                bool untakableLeft = (c == 0 || untakableWhite & (pos >> 1));
+                bool untakableRight = (c == 7 || untakableWhite & (pos << 1));
+                bool untakableUpLeft = (c == 0 || r == 0 || untakableWhite & (pos >> 9));
+                bool untakableUpRight = (c == 7 || r == 0 || untakableWhite & (pos >> 7));
+                bool untakableDownLeft = (c == 0 || r == 7 || untakableWhite & (pos << 7));
+                bool untakableDownRight = (c == 7 || r == 7 || untakableWhite & (pos << 9));
+                bool untakable = (untakableUp) && ((untakableUpLeft && untakableLeft) || (untakableUpRight || untakableRight));
+                untakable |= (untakableDown) && ((untakableLeft && untakableDownLeft) || (untakableRight && untakableDownRight));
+                if (untakable)
+                    untakableWhite |= pos & defactoColor & board;
+            }
+        }
+    }
+    return 2*__builtin_popcountll(untakableWhite) + (w ? GetNumWhite() - GetNumBlack() : GetNumBlack() - GetNumWhite());
+}
 uint64_t Board::GetAllLegalMoves(bool debug)
 {
     uint64_t enemyColor = (isWhite ? ~color : color) & board;

@@ -30,8 +30,9 @@ int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,int a
     bool gOver = b.GameOver(&legalMoves);
     if (gOver || maxDepth == 0)
     {
-        int sc = (b.GetNumWhite() - b.GetNumBlack()) * (player ? 1 : -1);
-        return sc;
+
+        //int sc = (b.GetNumWhite() - b.GetNumBlack()) * (player ? 1 : -1);
+        return b.GetEvaluation1(player);
     }
     else
     {

@@ -7,7 +7,7 @@ int main()
 {
     char letters[8] = {'a','b','c','d','e','f','g','h'};
     Board b = Board();
-    MinMaxPlayer p = MinMaxPlayer(10);
+    MinMaxPlayer p = MinMaxPlayer(8);
     std::string command;
     bool gameOn = true;
     while(true)
