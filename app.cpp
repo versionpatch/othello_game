@@ -114,7 +114,7 @@ int main()
             }
             if (command.length() != 2)
             {
-                std::cout << "Error" << std::endl;
+                std::cout << "?Error" << std::endl;
                 continue;
             }
             try
