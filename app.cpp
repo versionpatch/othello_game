@@ -23,13 +23,13 @@ int main()
             }
             uint64_t move = p.GetBestMove(b);
             if (move == 0)
-                std::cout << "= pass" << std::endl;
+                std::cout << "= pass" << std::endl << std::endl;
             else
             {
                 int ind = __builtin_ctzll(move);
                 int row = ind / 8;
                 int col = ind % 8;
-                std::cout << "= " << letters[col] << row + 1 << std::endl;
+                std::cout << "= " << letters[col] << row + 1 << std::endl << std::endl;
             }
         }
         if (command == "display")
@@ -108,7 +108,7 @@ int main()
                 if (sk)
                 {
                     b.Pass();
-                    std::cout << "= " << std::endl;
+                    std::cout << "= " << std::endl << std::endl;
                     continue;
                 }
             }
@@ -141,7 +141,7 @@ int main()
             }
             catch(...)
             {
-                std::cout << "Error" << std::endl;
+                std::cout << "?Error" << std::endl;
                 continue;
             }
         }
