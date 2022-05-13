@@ -5,6 +5,8 @@
 
 int main()
 {
+
+    srand((unsigned)time(NULL));
     char letters[8] = {'a','b','c','d','e','f','g','h'};
     Board b = Board();
     MinMaxPlayer p = MinMaxPlayer(8);
@@ -22,6 +24,7 @@ int main()
                 continue;
             }
             uint64_t move = p.GetBestMove(b);
+            //uint64_t move = p.GetRandomMove(b);
             if (move == 0)
             {
                 std::cout << "= pass" << std::endl << std::endl;

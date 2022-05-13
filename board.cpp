@@ -307,7 +307,7 @@ int Board::GetEvaluation2(bool w)
     int enemyCorner = __builtin_popcountll(9295429630892703873 & defactoEnemyColor);
     int supportBorder = __builtin_popcountll(18411139144890810879 & defactoColor);
     int enemyBorder = __builtin_popcountll(18411139144890810879 & defactoEnemyColor);
-    return 1*(supportNormal - enemyNormal) + 4*(supportCorner - enemyCorner) + 2*(supportBorder - enemyBorder);
+    return 1*(enemyNormal) + 4*(supportCorner - enemyCorner) + 2*(supportBorder - enemyBorder);
 }
 int Board::GetEvaluation1(bool w,int w1 = 20,int w2 = 200)
 {
@@ -333,7 +333,7 @@ int Board::GetEvaluation1(bool w,int w1 = 20,int w2 = 200)
                 bool untakableUpRight = (c == 7 || r == 0 || untakableWhite & (pos >> 7));
                 bool untakableDownLeft = (c == 0 || r == 7 || untakableWhite & (pos << 7));
                 bool untakableDownRight = (c == 7 || r == 7 || untakableWhite & (pos << 9));
-                bool untakable = (untakableUp) && ((untakableUpLeft && untakableLeft) || (untakableUpRight || untakableRight));
+                bool untakable = (untakableUp) && ((untakableUpLeft && untakableLeft) || (untakableUpRight && untakableRight));
                 untakable |= (untakableDown) && ((untakableLeft && untakableDownLeft) || (untakableRight && untakableDownRight));
                 if (untakable)
                     untakableWhite |= pos & defactoColor & board;
@@ -346,7 +346,7 @@ int Board::GetEvaluation1(bool w,int w1 = 20,int w2 = 200)
                 untakableUpRight = (c == 7 || r == 0 || untakableBlack & (pos >> 7));
                 untakableDownLeft = (c == 0 || r == 7 || untakableBlack & (pos << 7));
                 untakableDownRight = (c == 7 || r == 7 || untakableBlack & (pos << 9));
-                untakable = (untakableUp) && ((untakableUpLeft && untakableLeft) || (untakableUpRight || untakableRight));
+                untakable = (untakableUp) && ((untakableUpLeft && untakableLeft) || (untakableUpRight && untakableRight));
                 untakable |= (untakableDown) && ((untakableLeft && untakableDownLeft) || (untakableRight && untakableDownRight));
                 if (untakable)
                     untakableBlack |= pos & ~defactoColor & board;

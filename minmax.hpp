@@ -16,6 +16,7 @@ class MinMaxPlayer
         uint64_t GetBestMoveGreedy(Board b);
         int EvaluteState(Board b, int maxDepth,bool max,bool player,int alpha,int beta,uint64_t* outputMove = nullptr );
         uint64_t GetBestMove(Board b);
+        uint64_t GetRandomMove(Board b);
 };
 
 #endif

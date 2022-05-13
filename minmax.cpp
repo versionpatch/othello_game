@@ -92,3 +92,21 @@ uint64_t MinMaxPlayer::GetBestMove(Board b)
     EvaluteState(bp,depth,true,bp.IsWhite(),-9999,9999,&output);
     return output;
 }
+
+uint64_t MinMaxPlayer::GetRandomMove(Board b)
+{
+    uint64_t moves = b.GetAllLegalMoves(false);
+    int numMoves = __builtin_popcountll(moves);
+    int random = rand() % (numMoves);
+    int ct = 0;
+    if (moves == 0)
+        return 0;
+    while(ct < random)
+    {
+        uint64_t nextPos = (uint64_t)1 << __builtin_ctzll(moves);
+        moves &= ~nextPos;
+        ct++;
+    }
+            
+    return (uint64_t)1 << __builtin_ctzll(moves);
+}
