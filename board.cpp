@@ -295,13 +295,29 @@ void Board::Display()
         std::cout << std::endl;
     }
 }
-int Board::GetEvaluation1(bool w)
+int Board::GetEvaluation2(bool w)
+{
+    //Award more points for border, even more for corners
+    uint64_t defactoColor = (w ? color : ~color) & board;
+    uint64_t defactoEnemyColor = (w ? ~color : color) & board;
+    //total :
+    int supportNormal = __builtin_popcountll(defactoColor);
+    int enemyNormal = __builtin_popcountll(defactoEnemyColor);
+    int supportCorner = __builtin_popcountll(9295429630892703873 & defactoColor);
+    int enemyCorner = __builtin_popcountll(9295429630892703873 & defactoEnemyColor);
+    int supportBorder = __builtin_popcountll(18411139144890810879 & defactoColor);
+    int enemyBorder = __builtin_popcountll(18411139144890810879 & defactoEnemyColor);
+    return 1*(supportNormal - enemyNormal) + 4*(supportCorner - enemyCorner) + 2*(supportBorder - enemyBorder);
+}
+int Board::GetEvaluation1(bool w,int w1 = 20,int w2 = 200)
 {
     uint64_t defactoColor = w ? color : ~color;
-    //award 3 times as many points for stable disks
+    //award more points for stable disks
     uint64_t one = 1;
     uint64_t untakableWhite = (one << 0) || (one << 7) || (one << 56) || (one << 63);
+    uint64_t untakableBlack = (one << 0) || (one << 7) || (one << 56) || (one << 63);
     untakableWhite &= (defactoColor & board);
+    untakableBlack &= (~defactoColor & board);
     for (int it = 0;it < 7;it++)
     {
         for (int r = 0; r < 8;r++)
@@ -321,10 +337,23 @@ int Board::GetEvaluation1(bool w)
                 untakable |= (untakableDown) && ((untakableLeft && untakableDownLeft) || (untakableRight && untakableDownRight));
                 if (untakable)
                     untakableWhite |= pos & defactoColor & board;
+                
+                untakableUp = (r == 0 || untakableBlack & (pos >> 8));
+                untakableDown = (r == 7 || untakableBlack & (pos << 8));
+                untakableLeft = (c == 0 || untakableBlack & (pos >> 1));
+                untakableRight = (c == 7 || untakableBlack & (pos << 1));
+                untakableUpLeft = (c == 0 || r == 0 || untakableBlack & (pos >> 9));
+                untakableUpRight = (c == 7 || r == 0 || untakableBlack & (pos >> 7));
+                untakableDownLeft = (c == 0 || r == 7 || untakableBlack & (pos << 7));
+                untakableDownRight = (c == 7 || r == 7 || untakableBlack & (pos << 9));
+                untakable = (untakableUp) && ((untakableUpLeft && untakableLeft) || (untakableUpRight || untakableRight));
+                untakable |= (untakableDown) && ((untakableLeft && untakableDownLeft) || (untakableRight && untakableDownRight));
+                if (untakable)
+                    untakableBlack |= pos & ~defactoColor & board;
             }
         }
     }
-    return 2*__builtin_popcountll(untakableWhite) + (w ? GetNumWhite() - GetNumBlack() : GetNumBlack() - GetNumWhite());
+    return w1 * __builtin_popcountll(untakableWhite) - w2 * __builtin_popcountll(untakableBlack)  + (w ? GetNumWhite() - GetNumBlack() : GetNumBlack() - GetNumWhite());
 }
 uint64_t Board::GetAllLegalMoves(bool debug)
 {

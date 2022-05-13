@@ -45,7 +45,8 @@ class Board
         bool GameOver(uint64_t* output = nullptr, bool skip = true, bool* skippable = nullptr);
         bool IsWhite();
         void Pass();
-        int GetEvaluation1(bool w);
+        int GetEvaluation1(bool w,int w1,int w2);
+        int GetEvaluation2(bool w);
         uint64_t GetAllLegalMoves(bool debug = false);
         
 
