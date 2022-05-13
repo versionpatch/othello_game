@@ -307,7 +307,7 @@ int Board::GetEvaluation2(bool w)
     int enemyCorner = __builtin_popcountll(9295429630892703873 & defactoEnemyColor);
     int supportBorder = __builtin_popcountll(18411139144890810879 & defactoColor);
     int enemyBorder = __builtin_popcountll(18411139144890810879 & defactoEnemyColor);
-    return 1*(enemyNormal) + 4*(supportCorner - enemyCorner) + 2*(supportBorder - enemyBorder);
+    return 1*(supportNormal) + 4*(supportCorner - enemyCorner) + 2*(supportBorder - enemyBorder);
 }
 int Board::GetEvaluation1(bool w,int w1 = 20,int w2 = 200)
 {
