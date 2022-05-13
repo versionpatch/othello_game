@@ -33,8 +33,10 @@ int MinMaxPlayer::EvaluteState(Board b, int maxDepth,bool maxt,bool player,int a
         int totalNum = b.GetNumWhite() + b.GetNumBlack();
         if (totalNum < 24)
             return b.GetEvaluation2(player);
-        else
+        else if (totalNum < 64 - depth)
             return b.GetEvaluation1(player,2,2);
+        else 
+            return player ? b.GetNumWhite() : b.GetNumBlack();
     }
     else
     {
